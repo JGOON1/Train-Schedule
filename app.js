@@ -28,7 +28,7 @@ $("#add-train-btn").on("click", function (event) {
     start: trainStart,
     frequency: trainFrequency,
   };
-  
+
   //uploads data to database
   database.ref().push(newTrain);
 
@@ -65,4 +65,5 @@ database.ref().on("child_added", function(childSnapshot) {
   );
 
   $("#train-table > tbody").append(newRow);
+  console.log(newRow);
 });
