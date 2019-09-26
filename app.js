@@ -12,35 +12,63 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-  // function to add train time
-  $("#add-train-btn").on("click", function(event){
-    event.preventDefault();
+// function to add train time
+$("#add-train-btn").on("click", function (event) {
+  event.preventDefault();
 
-    //grab trian inputs
-    var trainName = $("#train-name-input").val().trim();
-    var trainDestination = $("#destination-input").val().trim();
-    var trainStart = moment($("#start-input").val().trim(), "H HH").format("LT");
-    var trainFrequency = $("#frequency-input").val().trim();
+  //grab trian inputs
+  var trainName = $("#train-name-input").val().trim();
+  var trainDestination = $("#destination-input").val().trim();
+  var trainStart = moment($("#start-input").val().trim(), "H HH").format("LT");
+  var trainFrequency = $("#frequency-input").val().trim();
 
-    var newTrain = {
-      name: trainName,
-      destination: trainDestination,
-      start: trainStart,
-      frequency: trainFrequency,
+  var newTrain = {
+    name: trainName,
+    destination: trainDestination,
+    start: trainStart,
+    frequency: trainFrequency,
 
-    };
-    //uploads data to database
-    database.ref().push(newTrain);
+  };
+  //uploads data to database
+  database.ref().push(newTrain);
 
-    console.log(newTrain.trainName);
-    console.log(newTrain.trainDestination);
-    console.log(newTrain.trainStart);
-    console.log(newTrain.trainFrequency);
+  console.log(newTrain.trainName);
+  console.log(newTrain.trainDestination);
+  console.log(newTrain.trainStart);
+  console.log(newTrain.trainFrequency);
 
-    $("#train-name-input").val("");
-    $("#destination-input").val("");
-    $("#start-input").val("");
-    $("#frequency-input").val("");
+  $("#train-name-input").val("");
+  $("#destination-input").val("");
+  $("#start-input").val("");
+  $("#frequency-input").val("");
 
-    
-  });
+
+});
+
+// getting information from firebase and displaying it to table
+database.ref().on("child_added", function(childSnapshot) {
+  console.log(childSnapshot);
+
+  var trainName = childSnapshot.val().name;
+  var trainDestination = childSnapshot.val().destination;
+  var trainStart = childSnapshot.val().start;
+  var trainFrequency = childSnapshot.val().frequency;
+
+  console.log(trainName);
+  console.log(trainDestination);
+  console.log(trainStart);
+  console.log(trainFrequency);
+
+  var newRow = $("<tr>").append(
+  $("<td>").text(trainName),
+  $("<td>").text(trainDestination),
+  $("<td>").text(trainStart),
+  $("<td>").text(trainFrequency),
+  );
+
+  $("#train-table > tbody").append(newRow);
+
+
+
+
+});
