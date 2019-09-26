@@ -19,7 +19,7 @@ $("#add-train-btn").on("click", function (event) {
   //grab trian inputs
   var trainName = $("#train-name-input").val().trim();
   var trainDestination = $("#destination-input").val().trim();
-  var trainStart = moment($("#start-input").val().trim(), "H HH").format("LT");
+  var trainStart = moment($("#start-input").val().trim(), "H:HH").format("LT");
   var trainFrequency = $("#frequency-input").val().trim();
 
   var newTrain = {
@@ -27,27 +27,25 @@ $("#add-train-btn").on("click", function (event) {
     destination: trainDestination,
     start: trainStart,
     frequency: trainFrequency,
-
   };
+  
   //uploads data to database
   database.ref().push(newTrain);
 
-  console.log(newTrain.trainName);
-  console.log(newTrain.trainDestination);
-  console.log(newTrain.trainStart);
-  console.log(newTrain.trainFrequency);
+  console.log(newTrain.name);
+  console.log(newTrain.destination);
+  console.log(newTrain.start);
+  console.log(newTrain.frequency);
 
   $("#train-name-input").val("");
   $("#destination-input").val("");
   $("#start-input").val("");
   $("#frequency-input").val("");
-
-
 });
 
 // getting information from firebase and displaying it to table
 database.ref().on("child_added", function(childSnapshot) {
-  console.log(childSnapshot);
+  console.log(childSnapshot.val());
 
   var trainName = childSnapshot.val().name;
   var trainDestination = childSnapshot.val().destination;
@@ -60,15 +58,11 @@ database.ref().on("child_added", function(childSnapshot) {
   console.log(trainFrequency);
 
   var newRow = $("<tr>").append(
-  $("<td>").text(trainName),
-  $("<td>").text(trainDestination),
-  $("<td>").text(trainStart),
-  $("<td>").text(trainFrequency),
+    $("<td>").text(trainName),
+    $("<td>").text(trainDestination),
+    $("<td>").text(trainStart),
+    $("<td>").text(trainFrequency),
   );
 
   $("#train-table > tbody").append(newRow);
-
-
-
-
 });
